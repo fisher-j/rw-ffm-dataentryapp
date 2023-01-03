@@ -43,3 +43,4 @@ for filename in filenames:
     for plot in collection["plots"]:
         plotid = backend.insert_plot(collection)
         collectid = backend.insert_collectid(collection)
+

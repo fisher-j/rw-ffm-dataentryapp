@@ -86,9 +86,9 @@ nnoremap <silent> <expr> k v:count == 0 ? 'gk' : 'k'
 nnoremap n nzz
 nnoremap { {zz
 nnoremap } }zz
-nnoremap <F12> :NvimTreeToggle
-nnoremap <F10> :sp:te:res 11icd ..python -m dataentryapp
 nnoremap <F9> gtipython -m dataentryapp
+nnoremap <F10> :sp:te:res 11icd ..python -m dataentryapp
+nnoremap <F12> :NvimTreeToggle
 nnoremap <Plug>PlenaryTestFile :lua require('plenary.test_harness').test_directory(vim.fn.expand("%:p"))
 xnoremap <Plug>(snippy-cut-text) <Cmd>call snippy#cut_text(mode(), v:true)
 nnoremap <Plug>(snippy-cut-text) <Cmd>set operatorfunc=snippy#cut_textg@
@@ -183,7 +183,7 @@ else
   set shortmess=aoO
 endif
 badd +1 frontend/regendataentry.py
-badd +259 frontend/fueldataentry.py
+badd +420 frontend/fueldataentry.py
 badd +117 frontend/mainmenu.py
 badd +771 backend/backend.py
 badd +171 backend/create_tables.sql
@@ -191,15 +191,10 @@ badd +5 ~/AppData/Local/nvim-data/snippets/python.snippets
 badd +294 frontend/treedataentry.py
 badd +308 frontend/datasheetnamer.py
 badd +435 debug_buffer
-badd +1 term://~/Desktop/db_learn/dataentryapp//8012:C:/Windows/system32/cmd.exe
-badd +32 term://~/Desktop/db_learn/dataentryapp//28512:C:/Windows/system32/cmd.exe
-badd +0 term://~/Desktop/db_learn/dataentryapp//26912:C:/Windows/system32/cmd.exe
+badd +0 backend/import_from_filename.py
 argglobal
 %argdel
-set stal=2
-tabnew +setlocal\ bufhidden=wipe
-tabrewind
-edit frontend/fueldataentry.py
+edit backend/import_from_filename.py
 let s:save_splitbelow = &splitbelow
 let s:save_splitright = &splitright
 set splitbelow splitright
@@ -219,7 +214,7 @@ set winwidth=1
 exe 'vert 1resize ' . ((&columns * 95 + 95) / 191)
 exe 'vert 2resize ' . ((&columns * 95 + 95) / 191)
 argglobal
-balt frontend/treedataentry.py
+balt frontend/fueldataentry.py
 let s:cpo_save=&cpo
 set cpo&vim
 inoremap <buffer> <expr> <BS> v:lua.MPairs.autopairs_bs()
@@ -234,17 +229,17 @@ nnoremap <buffer> <silent>  wr <Cmd>lua vim.lsp.buf.remove_workspace_folder()
 nnoremap <buffer> <silent>  wa <Cmd>lua vim.lsp.buf.add_workspace_folder()
 nnoremap <buffer> <silent>  k <Cmd>lua vim.lsp.buf.signature_help()
 nnoremap <buffer> <silent>  gi <Cmd>lua vim.lsp.buf.implementation()
-xnoremap <buffer> <silent> af :lua require'nvim-treesitter.textobjects.select'.select_textobject('@function.outer', 'x')
-onoremap <buffer> <silent> af :lua require'nvim-treesitter.textobjects.select'.select_textobject('@function.outer', 'o')
 xnoremap <buffer> <silent> ac :lua require'nvim-treesitter.textobjects.select'.select_textobject('@class.outer', 'x')
 onoremap <buffer> <silent> ac :lua require'nvim-treesitter.textobjects.select'.select_textobject('@class.outer', 'o')
+xnoremap <buffer> <silent> af :lua require'nvim-treesitter.textobjects.select'.select_textobject('@function.outer', 'x')
+onoremap <buffer> <silent> af :lua require'nvim-treesitter.textobjects.select'.select_textobject('@function.outer', 'o')
 nnoremap <buffer> <silent> gr <Cmd>lua vim.lsp.buf.references()
 nnoremap <buffer> <silent> gd <Cmd>lua vim.lsp.buf.definition()
 nnoremap <buffer> <silent> gD <Cmd>lua vim.lsp.buf.declaration()
-xnoremap <buffer> <silent> ic :lua require'nvim-treesitter.textobjects.select'.select_textobject('@class.inner', 'x')
-onoremap <buffer> <silent> ic :lua require'nvim-treesitter.textobjects.select'.select_textobject('@class.inner', 'o')
 xnoremap <buffer> <silent> if :lua require'nvim-treesitter.textobjects.select'.select_textobject('@function.inner', 'x')
 onoremap <buffer> <silent> if :lua require'nvim-treesitter.textobjects.select'.select_textobject('@function.inner', 'o')
+xnoremap <buffer> <silent> ic :lua require'nvim-treesitter.textobjects.select'.select_textobject('@class.inner', 'x')
+onoremap <buffer> <silent> ic :lua require'nvim-treesitter.textobjects.select'.select_textobject('@class.inner', 'o')
 nnoremap <buffer> <silent> <F1> <Cmd>lua vim.lsp.buf.hover()
 xnoremap <buffer> <silent> <S-Tab> :lua require'nvim-treesitter.incremental_selection'.node_decremental()
 let &cpo=s:cpo_save
@@ -354,7 +349,7 @@ setlocal spellcapcheck=[.?!]\\_[\\])'\"\	\ ]\\+
 setlocal spellfile=
 setlocal spelllang=en
 setlocal spelloptions=noplainbuffer
-setlocal statusline=%#lualine_a_command#\ COMMAND\ %<%#lualine_c_normal#\ fueldataentry.py\ %#lualine_c_normal#%=%#lualine_c_normal#\ utf-8\ |%#lualine_c_normal#\ dos\ |%#lualine_c_normal#\ python\ %#lualine_b_command#\ 77%%\ %#lualine_a_command#\ 396:15\ 
+setlocal statusline=%#lualine_a_command#\ COMMAND\ %#lualine_b_command#\ main\ %<%#lualine_c_normal#\ import_from_filename.py\ %#lualine_c_normal#%=%#lualine_c_normal#\ utf-8\ |%#lualine_c_normal#\ dos\ |%#lualine_c_normal#\ python\ %#lualine_b_command#\ 20%%\ %#lualine_a_command#\ \ \ 9:1\ \ 
 setlocal suffixesadd=.py
 setlocal swapfile
 setlocal synmaxcol=3000
@@ -369,7 +364,7 @@ setlocal textwidth=0
 setlocal thesaurus=
 setlocal thesaurusfunc=
 setlocal undofile
-setlocal undolevels=2147483647
+setlocal undolevels=-123456
 setlocal varsofttabstop=
 setlocal vartabstop=
 setlocal virtualedit=
@@ -382,12 +377,12 @@ setlocal wrap
 setlocal wrapmargin=0
 silent! normal! zE
 let &fdl = &fdl
-let s:l = 396 - ((10 * winheight(0) + 26) / 52)
+let s:l = 9 - ((8 * winheight(0) + 26) / 53)
 if s:l < 1 | let s:l = 1 | endif
 keepjumps exe s:l
 normal! zt
-keepjumps 396
-normal! 015|
+keepjumps 9
+normal! 0
 wincmd w
 argglobal
 if bufexists(fnamemodify("backend/backend.py", ":p")) | buffer backend/backend.py | else | edit backend/backend.py | endif
@@ -400,26 +395,26 @@ set cpo&vim
 inoremap <buffer> <expr> <BS> v:lua.MPairs.autopairs_bs()
 xnoremap <buffer> <silent> 	 :lua require'nvim-treesitter.incremental_selection'.node_incremental()
 xnoremap <buffer> <silent>  :lua require'nvim-treesitter.incremental_selection'.scope_incremental()
-nnoremap <buffer> <silent>  so <Cmd>lua require('telescope.builtin').lsp_document_symbols()
-nnoremap <buffer> <silent>  ca <Cmd>lua vim.lsp.buf.code_action()
-nnoremap <buffer> <silent>  rn <Cmd>lua vim.lsp.buf.rename()
-nnoremap <buffer> <silent>  D <Cmd>lua vim.lsp.buf.type_definition()
-nnoremap <buffer> <silent>  wl <Cmd>lua print(vim.inspect(vim.lsp.buf.list_workspace_folders()))
-nnoremap <buffer> <silent>  wr <Cmd>lua vim.lsp.buf.remove_workspace_folder()
-nnoremap <buffer> <silent>  wa <Cmd>lua vim.lsp.buf.add_workspace_folder()
-nnoremap <buffer> <silent>  k <Cmd>lua vim.lsp.buf.signature_help()
 nnoremap <buffer> <silent>  gi <Cmd>lua vim.lsp.buf.implementation()
-xnoremap <buffer> <silent> af :lua require'nvim-treesitter.textobjects.select'.select_textobject('@function.outer', 'x')
-onoremap <buffer> <silent> af :lua require'nvim-treesitter.textobjects.select'.select_textobject('@function.outer', 'o')
+nnoremap <buffer> <silent>  k <Cmd>lua vim.lsp.buf.signature_help()
+nnoremap <buffer> <silent>  wa <Cmd>lua vim.lsp.buf.add_workspace_folder()
+nnoremap <buffer> <silent>  wr <Cmd>lua vim.lsp.buf.remove_workspace_folder()
+nnoremap <buffer> <silent>  wl <Cmd>lua print(vim.inspect(vim.lsp.buf.list_workspace_folders()))
+nnoremap <buffer> <silent>  D <Cmd>lua vim.lsp.buf.type_definition()
+nnoremap <buffer> <silent>  rn <Cmd>lua vim.lsp.buf.rename()
+nnoremap <buffer> <silent>  ca <Cmd>lua vim.lsp.buf.code_action()
+nnoremap <buffer> <silent>  so <Cmd>lua require('telescope.builtin').lsp_document_symbols()
 xnoremap <buffer> <silent> ac :lua require'nvim-treesitter.textobjects.select'.select_textobject('@class.outer', 'x')
 onoremap <buffer> <silent> ac :lua require'nvim-treesitter.textobjects.select'.select_textobject('@class.outer', 'o')
-nnoremap <buffer> <silent> gr <Cmd>lua vim.lsp.buf.references()
-nnoremap <buffer> <silent> gd <Cmd>lua vim.lsp.buf.definition()
+xnoremap <buffer> <silent> af :lua require'nvim-treesitter.textobjects.select'.select_textobject('@function.outer', 'x')
+onoremap <buffer> <silent> af :lua require'nvim-treesitter.textobjects.select'.select_textobject('@function.outer', 'o')
 nnoremap <buffer> <silent> gD <Cmd>lua vim.lsp.buf.declaration()
-xnoremap <buffer> <silent> ic :lua require'nvim-treesitter.textobjects.select'.select_textobject('@class.inner', 'x')
-onoremap <buffer> <silent> ic :lua require'nvim-treesitter.textobjects.select'.select_textobject('@class.inner', 'o')
+nnoremap <buffer> <silent> gd <Cmd>lua vim.lsp.buf.definition()
+nnoremap <buffer> <silent> gr <Cmd>lua vim.lsp.buf.references()
 xnoremap <buffer> <silent> if :lua require'nvim-treesitter.textobjects.select'.select_textobject('@function.inner', 'x')
 onoremap <buffer> <silent> if :lua require'nvim-treesitter.textobjects.select'.select_textobject('@function.inner', 'o')
+xnoremap <buffer> <silent> ic :lua require'nvim-treesitter.textobjects.select'.select_textobject('@class.inner', 'x')
+onoremap <buffer> <silent> ic :lua require'nvim-treesitter.textobjects.select'.select_textobject('@class.inner', 'o')
 nnoremap <buffer> <silent> <F1> <Cmd>lua vim.lsp.buf.hover()
 xnoremap <buffer> <silent> <S-Tab> :lua require'nvim-treesitter.incremental_selection'.node_decremental()
 let &cpo=s:cpo_save
@@ -557,7 +552,7 @@ setlocal wrap
 setlocal wrapmargin=0
 silent! normal! zE
 let &fdl = &fdl
-let s:l = 765 - ((25 * winheight(0) + 26) / 52)
+let s:l = 765 - ((27 * winheight(0) + 26) / 53)
 if s:l < 1 | let s:l = 1 | endif
 keepjumps exe s:l
 normal! zt
@@ -566,163 +561,15 @@ normal! 09|
 wincmd w
 exe 'vert 1resize ' . ((&columns * 95 + 95) / 191)
 exe 'vert 2resize ' . ((&columns * 95 + 95) / 191)
-tabnext
-argglobal
-if bufexists(fnamemodify("term://~/Desktop/db_learn/dataentryapp//26912:C:/Windows/system32/cmd.exe", ":p")) | buffer term://~/Desktop/db_learn/dataentryapp//26912:C:/Windows/system32/cmd.exe | else | edit term://~/Desktop/db_learn/dataentryapp//26912:C:/Windows/system32/cmd.exe | endif
-if &buftype ==# 'terminal'
-  silent file term://~/Desktop/db_learn/dataentryapp//26912:C:/Windows/system32/cmd.exe
-endif
-balt frontend/fueldataentry.py
-let s:cpo_save=&cpo
-set cpo&vim
-inoremap <buffer> <expr> <BS> v:lua.MPairs.autopairs_bs()
-let &cpo=s:cpo_save
-unlet s:cpo_save
-setlocal keymap=
-setlocal noarabic
-setlocal autoindent
-setlocal backupcopy=
-setlocal nobinary
-set breakindent
-setlocal breakindent
-setlocal breakindentopt=
-setlocal bufhidden=
-setlocal buflisted
-setlocal buftype=terminal
-setlocal nocindent
-setlocal cinkeys=0{,0},0),0],:,0#,!^F,o,O,e
-setlocal cinoptions=
-setlocal cinwords=if,else,while,do,for,switch
-setlocal cinscopedecls=public,protected,private
-setlocal colorcolumn=
-setlocal comments=s1:/*,mb:*,ex:*/,://,b:#,:%,:XCOMM,n:>,fb:-
-setlocal commentstring=/*%s*/
-setlocal complete=.,w,b,u,t
-setlocal concealcursor=
-setlocal conceallevel=0
-setlocal completefunc=
-setlocal completeslash=
-setlocal nocopyindent
-setlocal nocursorbind
-setlocal nocursorcolumn
-setlocal nocursorline
-setlocal cursorlineopt=both
-setlocal define=
-setlocal dictionary=
-setlocal nodiff
-setlocal equalprg=
-setlocal errorformat=
-setlocal noexpandtab
-if &filetype != ''
-setlocal filetype=
-endif
-setlocal fillchars=
-setlocal fixendofline
-setlocal foldcolumn=0
-setlocal foldenable
-setlocal foldexpr=0
-setlocal foldignore=#
-setlocal foldlevel=0
-setlocal foldmarker={{{,}}}
-setlocal foldmethod=manual
-setlocal foldminlines=1
-setlocal foldnestmax=20
-setlocal foldtext=foldtext()
-setlocal formatexpr=
-setlocal formatoptions=tcqj
-setlocal formatlistpat=^\\s*\\d\\+[\\]:.)}\\t\ ]\\s*
-setlocal formatprg=
-setlocal grepprg=
-setlocal iminsert=0
-setlocal imsearch=-1
-setlocal include=
-setlocal includeexpr=
-setlocal indentexpr=
-setlocal indentkeys=0{,0},0),0],:,!^F,o,O,e,<:>,=elif,=except
-setlocal noinfercase
-setlocal iskeyword=@,48-57,_,192-255
-setlocal keywordprg=
-set linebreak
-setlocal linebreak
-setlocal nolisp
-setlocal lispwords=
-set list
-setlocal nolist
-setlocal listchars=
-setlocal makeencoding=
-setlocal makeprg=
-setlocal matchpairs=(:),{:},[:]
-setlocal modeline
-setlocal nomodifiable
-setlocal nrformats=bin,hex
-set number
-setlocal number
-setlocal numberwidth=4
-setlocal omnifunc=
-setlocal path=
-setlocal nopreserveindent
-setlocal nopreviewwindow
-setlocal quoteescape=\\
-setlocal noreadonly
-set relativenumber
-setlocal relativenumber
-setlocal norightleft
-setlocal rightleftcmd=search
-setlocal scrollback=10000
-setlocal noscrollbind
-setlocal scrolloff=-1
-setlocal shiftwidth=2
-setlocal showbreak=
-setlocal sidescrolloff=-1
-set signcolumn=number
-setlocal signcolumn=number
-setlocal nosmartindent
-setlocal softtabstop=0
-setlocal nospell
-setlocal spellcapcheck=[.?!]\\_[\\])'\"\	\ ]\\+
-setlocal spellfile=
-setlocal spelllang=en
-setlocal spelloptions=
-setlocal statusline=%#lualine_a_normal#\ NORMAL\ %<%#lualine_c_normal#\ cmd.exe\ [-]\ %#lualine_c_normal#%=%#lualine_c_normal#\ dos\ %#lualine_b_normal#\ Bot\ %#lualine_a_normal#\ 384:32\ 
-setlocal suffixesadd=
-setlocal noswapfile
-setlocal synmaxcol=3000
-if &syntax != ''
-setlocal syntax=
-endif
-setlocal tagfunc=
-setlocal tabstop=8
-setlocal tagcase=
-setlocal tags=
-setlocal textwidth=0
-setlocal thesaurus=
-setlocal thesaurusfunc=
-setlocal undofile
-setlocal undolevels=-1
-setlocal varsofttabstop=
-setlocal vartabstop=
-setlocal virtualedit=
-setlocal winbar=
-setlocal winblend=0
-setlocal winhighlight=
-setlocal nowinfixheight
-setlocal nowinfixwidth
-setlocal nowrap
-setlocal wrapmargin=0
-let s:l = 384 - ((51 * winheight(0) + 26) / 52)
-if s:l < 1 | let s:l = 1 | endif
-keepjumps exe s:l
-normal! zt
-keepjumps 384
-normal! 032|
 tabnext 1
-set stal=1
 if exists('s:wipebuf') && len(win_findbuf(s:wipebuf)) == 0 && getbufvar(s:wipebuf, '&buftype') isnot# 'terminal'
   silent exe 'bwipe ' . s:wipebuf
 endif
 unlet! s:wipebuf
 set winheight=1 winwidth=20
 set shortmess=filnxtToOF
+let &winminheight = s:save_winminheight
+let &winminwidth = s:save_winminwidth
 let s:sx = expand("<sfile>:p:r")."x.vim"
 if filereadable(s:sx)
   exe "source " . fnameescape(s:sx)
