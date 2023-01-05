@@ -7,13 +7,12 @@ from pathlib import Path
 from tkinter import filedialog
 
 from dataentryapp.backend import backend
+backend.initialize_database()
 from dataentryapp.frontend import template
-
 from dataentryapp.frontend import treedataentry
 from dataentryapp.frontend import fueldataentry
 from dataentryapp.frontend import regendataentry
 from dataentryapp.frontend import datasheetnamer
-from dataentryapp.backend import backend
 
 class DatasheetsFrame(ttk.Frame):
     def __init__(self, parent):
@@ -87,10 +86,13 @@ class MainMenu(tk.Tk):
         for i in self.ds_frame.datasheets.get_children():
             self.ds_frame.datasheets.delete(i)
         # get data
-        db_datasheets = backend.get_datasheets_table()
-
+        datasheets = backend.get_datasheets_table()
+        datasheets = [list(row) for row in datasheets]
+        for idx, row in enumerate(datasheets):
+            datasheets[idx][2] = row[2].strftime("%m/%d/%Y %H:%M:%S")
+            
         # add data to the treeview
-        for sheet in db_datasheets:
+        for sheet in datasheets:
             self.ds_frame.datasheets.insert('', tk.END, values=sheet)
 
     def focus_entry_form(self):

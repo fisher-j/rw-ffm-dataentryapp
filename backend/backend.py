@@ -3,15 +3,26 @@ from pathlib import Path
 from datetime import datetime, date
 import re
 
-# assumes run from parent directory of dataentryapp
-# create connection and cursor
-dataDir = Path("data")
-appDir = Path("dataentryapp")
-datasheetsDir = dataDir / "datasheets" / "final"
-conn = sqlite3.connect(dataDir / "rw.db", detect_types=sqlite3.PARSE_DECLTYPES)
+def initialize_database():
+    # assumes run from parent directory of dataentryapp
+    # create connection and cursor
+    global dataDir
+    global appDir
+    global datasheetsDir
+    global conn
+    dataDir = Path("data")
+    appDir = Path("dataentryapp")
+    datasheetsDir = dataDir / "datasheets" / "final"
+    conn = sqlite3.connect(dataDir / "rw.db", detect_types=sqlite3.PARSE_DECLTYPES)
 
-def test():
-    print("test yes")
+    # check if database is empty, if so, create the tables
+    cursor = conn.cursor()
+    cursor.execute("SELECT name FROM sqlite_master WHERE type='table';")
+    res = cursor.fetchall()
+    cursor.close()
+
+    if not res:
+        create_tables()
 
 def create_tables():
     cur = conn.cursor()
@@ -21,13 +32,6 @@ def create_tables():
     conn.commit()
     cur.close()
 
-# check if database is empty, if so, create the tables
-cursor = conn.cursor()
-cursor.execute("SELECT name FROM sqlite_master WHERE type='table';")
-res = cursor.fetchall()
-
-if not res:
-    create_tables()
 # I might use these values for value checking database inputs
 # :TODO ensure that all data inputs are checked for type and value
 
@@ -1257,17 +1261,21 @@ def name_timestamp(path):
     return (path.name, timestamp)
 
 
-def make_unique_filename(collection, key_names):
+def make_unique_filename(collection):
     """Generate pdf filename for datasheet
 
     All sheets other than regen are assumed to have a single plot number.
     For regen sheets, plot number is ommited"""
 
+    key_names = ("stage", "type", "site", "treatment", "burn")
+
     if collection["type"] == "regen":
         # dont' include plotnum number with regen datasheets
-        fn_parts = [collection[key] for key in key_names if key != "plotnum"]
+        fn_parts = [collection[key] for key in key_names]
     else:
-        fn_parts = collection.values()
+        plot_num = collection["plotnums"][0]
+        fn_parts = [collection[key] for key in key_names]
+        fn_parts.append(plot_num)
     fp = Path(datasheetsDir, "_".join(fn_parts) + ".pdf")
     fp = ensure_unique_filename(fp)
     return fp

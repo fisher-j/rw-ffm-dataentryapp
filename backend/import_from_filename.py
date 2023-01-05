@@ -1,46 +1,54 @@
+import os
 import sqlite3
 from pathlib import Path
 from datetime import datetime, date
 import re
+import backend
 
 # assumes run from backend directory of dataentryapp
 # create connection and cursor
 
-dataDir = Path("../../data")
-print(dataDir)
-appDir = Path("../../dataentryapp")
-datasheetsDir = dataDir / "datasheets" / "final"
-conn = sqlite3.connect(dataDir / "rw.db", detect_types=sqlite3.PARSE_DECLTYPES)
+# dataDir = Path("../../data")
+# appDir = Path("../../dataentryapp")
+# datasheetsDir = dataDir / "datasheets" / "final"
+# conn = sqlite3.connect(dataDir / "rw.db", detect_types=sqlite3.PARSE_DECLTYPES)
+#
+# # check if database is empty, if so, create the tables
+# cursor = conn.cursor()
+# cursor.execute("SELECT name FROM sqlite_master WHERE type='table';")
+# res = cursor.fetchall()
+#
+# if not res:
+#     backend.create_tables()
+#
+# cursor.close()
 
-# check if database is empty, if so, create the tables
-cursor = conn.cursor()
-cursor.execute("SELECT name FROM sqlite_master WHERE type='table';")
-res = cursor.fetchall()
+backend.initialize_database()
+importDir = Path("data/datasheets/import")
 
-if not res:
-    create_tables()
+filepaths = [f for f in importDir.iterdir() if f.is_file()]
+print("\n".join([f.stem for f in filepaths]))
 
-cursos.close()
-
-filenames = [f.stem for f in datasheetsDir.iterdir() if f.is_file()]
-print("\n".join(filenames))
-
-def parse_filename(filename):
-    keys = ["stage", "type", "site", "treatment", "burn", "plots"]
-    filename_parts = filename.split("_")
-    parts1 = filename_parts[:5]
+def parse_filename(fp):
+    keys = ["stage", "type", "site", "treatment", "burn", "plotnums"]
+    filename_parts = fp.stem.split("_")
+    unit = filename_parts[:5]
     plotnums = filename_parts[5:]
-    parts1.append(plotnums)
-    collection = {k:v for k, v in zip(keys, parts1)}
+    unit.append(plotnums)
+    collection = {k:v for k, v in zip(keys, unit)}
     return collection
 
 # insert plots, insert collections, insert datasheets, insert collectdatasheets 
-for filename in filenames:
-    collection = parse_filename(filename)
-    key_names = ("stage", "type", "site", "treatment", "burn")
-    newfilename = make_unique_filename(collection, key_names)
+for fp in filepaths:
+    collection = parse_filename(fp)
+    newfp = backend.make_unique_filename(collection)
+    fp.rename(newfp)
+    datasheetid = backend.insert_datasheet(newfp)
 
-    for plot in collection["plots"]:
+    for plot in collection["plotnums"]:
+        print("plot: ", plot)
+        collection["plotnum"] = int(plot)
         plotid = backend.insert_plot(collection)
+        collection["plotid"] = plotid
         collectid = backend.insert_collectid(collection)
-
+        backend.link_datasheet(collectid, datasheetid)

@@ -218,19 +218,18 @@ class PdfFrame(ttk.Frame):
                 parent=self.parent)
             return None
         
-        plot_num = [int(n) for n in plot_num]
-        
         # Only single plot data sheets are named with their plot number
         # plot number is ommited for regen datasheets
         col = collection.copy()
-        col["plotnum"] = str(plot_num[0])
-        filename = backend.make_unique_filename(col, key_names)
+        col["plotnum"] = plot_num
+        filename = backend.make_unique_filename(col)
 
         # check database if combination of stage, datatype, site, treatment, burn, plot
         # exists already.
         prior_collection = []
         prior_plotid = []
         col = collection.copy()
+        plot_num = [int(n) for n in plot_num]
         for p in plot_num:
             col["plotnum"] = p
             clct = backend.search_collectid(col)
