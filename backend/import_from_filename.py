@@ -24,7 +24,8 @@ import backend
 # cursor.close()
 
 backend.initialize_database()
-importDir = Path("data/datasheets/import")
+# Change this do appropriate directory
+importDir = Path("data/datasheets/import_all")
 
 filepaths = [f for f in importDir.iterdir() if f.is_file()]
 print("\n".join([f.stem for f in filepaths]))
